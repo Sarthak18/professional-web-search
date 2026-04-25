@@ -106,11 +106,18 @@ function Index() {
       {/* Hero */}
       <main className="px-6 md:px-12 pt-12 md:pt-20 pb-16 max-w-5xl mx-auto">
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs text-muted-foreground mb-6"
-            style={{ boxShadow: "var(--shadow-soft)" }}>
-            <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            Now powered by Copilot · LinkedIn graph included
-          </div>
+          {isReady && user ? (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 text-xs text-primary mb-6">
+              <Sparkles className="h-3 w-3" />
+              Personalized for {user.position}s at {user.company}
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs text-muted-foreground mb-6"
+              style={{ boxShadow: "var(--shadow-soft)" }}>
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+              Now powered by Copilot · LinkedIn graph included
+            </div>
+          )}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-5">
             Search the{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
