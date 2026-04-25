@@ -198,7 +198,10 @@ function Index() {
           </div>
         </section>
 
-        {/* Stats / trust strip */}
+        {/* Career Videos */}
+        <CareerVideosSection />
+
+
         <section className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { v: "200M+", l: "Research papers" },
