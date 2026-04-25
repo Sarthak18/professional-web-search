@@ -263,6 +263,8 @@ function Index() {
           <a href="#" className="hover:text-foreground transition-colors">About</a>
         </div>
       </footer>
+
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
     </div>
   );
 }
