@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
-import { Play, Video, Clock, Eye, ChevronDown, Sparkles, Filter } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Play, Video, Clock, Eye, ChevronDown, Sparkles, Filter, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-store";
 
 const DOMAINS = ["Technology", "Finance", "Healthcare", "Marketing", "Consulting", "Design"];
 
