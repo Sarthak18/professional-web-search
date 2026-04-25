@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, Sparkles, FileText, Users, FileBadge2, Briefcase, Mic, Camera, ArrowRight, TrendingUp } from "lucide-react";
+import { Search, Sparkles, FileText, Users, FileBadge2, Briefcase, Mic, Camera, ArrowRight, TrendingUp, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CareerVideosSection } from "@/components/CareerVideosSection";
+import { SignInModal } from "@/components/SignInModal";
+import { useAuth } from "@/lib/auth-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,6 +42,8 @@ const aiSuggestions = [
 function Index() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState(0);
+  const [signInOpen, setSignInOpen] = useState(false);
+  const { user, signOut, isReady } = useAuth();
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
@@ -68,20 +72,52 @@ function Index() {
           <a href="#" className="hover:text-foreground transition-colors">API</a>
           <a href="#" className="hover:text-foreground transition-colors">Pricing</a>
         </nav>
-        <button className="px-4 py-2 rounded-full text-sm font-medium text-primary-foreground transition-all hover:scale-105"
-          style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}>
-          Sign in with Microsoft
-        </button>
+        {isReady && user ? (
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2.5 px-2 py-1 rounded-full bg-card border border-border" style={{ boxShadow: "var(--shadow-soft)" }}>
+              <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${user.avatarColor} flex items-center justify-center text-white font-semibold text-[11px]`}>
+                {user.name.split(" ").map((n) => n[0]).join("")}
+              </div>
+              <div className="text-xs pr-2">
+                <div className="font-semibold leading-tight">{user.name}</div>
+                <div className="text-muted-foreground text-[10px] leading-tight">{user.position} · {user.company}</div>
+              </div>
+            </div>
+            <button
+              onClick={signOut}
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label="Sign out"
+              title="Sign out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setSignInOpen(true)}
+            className="px-4 py-2 rounded-full text-sm font-medium text-primary-foreground transition-all hover:scale-105"
+            style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}
+          >
+            Sign in with LinkedIn
+          </button>
+        )}
       </header>
 
       {/* Hero */}
       <main className="px-6 md:px-12 pt-12 md:pt-20 pb-16 max-w-5xl mx-auto">
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs text-muted-foreground mb-6"
-            style={{ boxShadow: "var(--shadow-soft)" }}>
-            <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            Now powered by Copilot · LinkedIn graph included
-          </div>
+          {isReady && user ? (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 text-xs text-primary mb-6">
+              <Sparkles className="h-3 w-3" />
+              Personalized for {user.position}s at {user.company}
+            </div>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs text-muted-foreground mb-6"
+              style={{ boxShadow: "var(--shadow-soft)" }}>
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+              Now powered by Copilot · LinkedIn graph included
+            </div>
+          )}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-5">
             Search the{" "}
             <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
@@ -227,6 +263,8 @@ function Index() {
           <a href="#" className="hover:text-foreground transition-colors">About</a>
         </div>
       </footer>
+
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
     </div>
   );
 }

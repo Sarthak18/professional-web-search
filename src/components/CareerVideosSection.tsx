@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
-import { Play, Video, Clock, Eye, ChevronDown, Sparkles, Filter } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Play, Video, Clock, Eye, ChevronDown, Sparkles, Filter, Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-store";
 
 const DOMAINS = ["Technology", "Finance", "Healthcare", "Marketing", "Consulting", "Design"];
 
@@ -90,17 +91,29 @@ function Select({
 }
 
 export function CareerVideosSection() {
+  const { user, isReady } = useAuth();
   const [domain, setDomain] = useState(DOMAINS[0]);
   const [position, setPosition] = useState(POSITIONS_BY_DOMAIN[DOMAINS[0]][0]);
   const [company, setCompany] = useState(COMPANIES[0]);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
-  const positions = POSITIONS_BY_DOMAIN[domain];
+  // Auto-fill selectors when a user signs in (only on client)
+  useEffect(() => {
+    if (isReady && user) {
+      setDomain(user.domain);
+      setPosition(user.position);
+      setCompany(user.company);
+    }
+  }, [isReady, user]);
+
+  const positions = POSITIONS_BY_DOMAIN[domain] ?? POSITIONS_BY_DOMAIN[DOMAINS[0]];
 
   const videos = useMemo(() => {
     const all = generateVideos(domain, position, company);
     return activeTag ? all.filter((v) => v.tag === activeTag) : all;
   }, [domain, position, company, activeTag]);
+
+  const personalized = isReady && !!user;
 
   return (
     <section className="mt-20">
@@ -115,14 +128,23 @@ export function CareerVideosSection() {
               <Video className="h-4 w-4 text-primary-foreground" />
             </div>
             <span className="text-xs font-semibold uppercase tracking-widest text-primary">
-              Career Video Lookup
+              {personalized ? "Your Career Feed" : "Career Video Lookup"}
             </span>
           </div>
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight">
-            Watch what it really takes to land the role.
+            {personalized
+              ? `Hand-picked for you, ${user.name.split(" ")[0]}.`
+              : "Watch what it really takes to land the role."}
           </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            AI-curated videos from insiders — pick a domain, position, and company.
+            {personalized ? (
+              <span className="inline-flex items-center gap-1.5">
+                <Linkedin className="h-3.5 w-3.5 text-[#0A66C2]" fill="currentColor" />
+                Tuned to your LinkedIn profile · adjust selectors to explore more
+              </span>
+            ) : (
+              "AI-curated videos from insiders — pick a domain, position, and company."
+            )}
           </p>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
