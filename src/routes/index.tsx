@@ -72,10 +72,35 @@ function Index() {
           <a href="#" className="hover:text-foreground transition-colors">API</a>
           <a href="#" className="hover:text-foreground transition-colors">Pricing</a>
         </nav>
-        <button className="px-4 py-2 rounded-full text-sm font-medium text-primary-foreground transition-all hover:scale-105"
-          style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}>
-          Sign in with Microsoft
-        </button>
+        {isReady && user ? (
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2.5 px-2 py-1 rounded-full bg-card border border-border" style={{ boxShadow: "var(--shadow-soft)" }}>
+              <div className={`h-7 w-7 rounded-full bg-gradient-to-br ${user.avatarColor} flex items-center justify-center text-white font-semibold text-[11px]`}>
+                {user.name.split(" ").map((n) => n[0]).join("")}
+              </div>
+              <div className="text-xs pr-2">
+                <div className="font-semibold leading-tight">{user.name}</div>
+                <div className="text-muted-foreground text-[10px] leading-tight">{user.position} · {user.company}</div>
+              </div>
+            </div>
+            <button
+              onClick={signOut}
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label="Sign out"
+              title="Sign out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setSignInOpen(true)}
+            className="px-4 py-2 rounded-full text-sm font-medium text-primary-foreground transition-all hover:scale-105"
+            style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}
+          >
+            Sign in with LinkedIn
+          </button>
+        )}
       </header>
 
       {/* Hero */}
