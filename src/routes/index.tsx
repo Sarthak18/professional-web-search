@@ -42,6 +42,8 @@ const aiSuggestions = [
 function Index() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState(0);
+  const [signInOpen, setSignInOpen] = useState(false);
+  const { user, signOut, isReady } = useAuth();
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
