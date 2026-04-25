@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, Sparkles, FileText, Users, FileBadge2, Briefcase, Mic, Camera, ArrowRight, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CareerVideosSection } from "@/components/CareerVideosSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -197,7 +198,10 @@ function Index() {
           </div>
         </section>
 
-        {/* Stats / trust strip */}
+        {/* Career Videos */}
+        <CareerVideosSection />
+
+
         <section className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { v: "200M+", l: "Research papers" },
