@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, Sparkles, FileText, Users, FileBadge2, Briefcase, Mic, Camera, ArrowRight, TrendingUp } from "lucide-react";
+import { Search, Sparkles, FileText, Users, FileBadge2, Briefcase, Mic, Camera, ArrowRight, TrendingUp, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CareerVideosSection } from "@/components/CareerVideosSection";
+import { SignInModal } from "@/components/SignInModal";
+import { useAuth } from "@/lib/auth-store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
